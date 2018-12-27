@@ -1,0 +1,18 @@
+{
+  "name": "expressdemo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "KRUNAL LATHIYA",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongoose": "^5.0.1",
+    "nodemon": "^1.18.7"
+  },
+  "description": ""
+}
