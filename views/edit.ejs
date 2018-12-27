@@ -19,9 +19,24 @@
 
           <%
           var options = [ "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00" ];
+          let newArray=[];
+          for ( var i = 0; i < coin.length; i++ ){
+            console.log(coin);
+            newArray.push(coins[i].price);
+
+          };
           for ( var i = 0; i < options.length; i++ )
           {
+
+
               var selected = ( coin.price == "1"+i+":00" ) ? "selected" : "";
+
+              options = options.filter( function( el ) {
+                
+                return newArray.indexOf( el ) < 0;
+               
+              } );
+
               %><option value="<%=options[ i ] %>" <%=selected %>><%="1"+i+":00"  %></option><%
           }
           %>

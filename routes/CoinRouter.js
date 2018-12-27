@@ -38,6 +38,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
    Coin.findById(id, function (err, coin){
        res.render('edit', {coin: coin});
    });
+   
  });
 
  CoinRouter.route('/update/:id').post(function (req, res) {
