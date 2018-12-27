@@ -9,6 +9,7 @@ CoinRouter.route('/').get(function (req, res) {
         console.log(err);
       }
       else {
+       
         res.render('index', {coins: coins});
       }
     });

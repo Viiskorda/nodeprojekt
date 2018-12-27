@@ -4,6 +4,40 @@ const port = 3000;
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+var server =app.listen(port, function(){
+  console.log('Node js Express js Tutorial at port', port);
+});
+// const http = require('http').Server(app);
+
+// const io = require('socket.io')(http);
+
+var io = require('socket.io').listen(server);
+
+//const io = require('socket.io')();
+// io.on('connection', function (socket) {
+//   console.log('Ühendus kasutajaga on loodud');
+//   io.emit('this', { will: 'be received by everyone'});
+
+//   socket.on('private message', function (from, msg) {
+//     console.log('I received a private message by ', from, ' saying ', msg);
+//   });
+
+//   socket.on('disconnect', function () {
+//     io.emit('user disconnected');
+//   });
+// });
+
+io.on('connection', function(socket){
+  console.log('Ühendus kasutajaga on loodud');
+  
+  // võtame kliendi poolt vastu teate "chat"
+  socket.on('chat', (msg) => {
+      // saadame kõikidele klientidele tagasi
+      io.emit('chat', msg);
+  });
+});
+
+
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/expressdemo');
@@ -22,6 +56,3 @@ app.get('/', function (req, res) {
    res.sendFile(path.join(__dirname,'public', 'index.html'));
 });
 
-app.listen(port, function(){
-  console.log('Node js Express js Tutorial at port', port);
-});
