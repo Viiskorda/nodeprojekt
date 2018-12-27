@@ -16,8 +16,8 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <td><b>Coin Price</b></td>
-            <td><b>Coin Name</b></td>
+            <td><b>Kell</b></td>
+            <td><b>kliendi nimi ja teenuse nimetus</b></td>
 
             <td colspan="2"><b>Action</b> </td>
 
@@ -28,10 +28,10 @@
       <% for(var i=0; i < coins.length; i++) { %>
       <tr>
         <td>
-          <%= coins[i].name %>
+          <%= coins[i].price %>
         </td>
         <td>
-          <%= coins[i].price %>
+          <%= coins[i].name %>
         </td>
         <td><a href="/coins/edit/<%= coins[i]._id %>" class="btn btn-primary">Edit</a></td>
         <td><a href="/coins/delete/<%= coins[i]._id %>" class="btn btn-danger">Delete</a></td>

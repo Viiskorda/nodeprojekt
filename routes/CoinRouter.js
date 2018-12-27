@@ -25,7 +25,10 @@ CoinRouter.route('/create').get(function (req, res) {
      .then(coin => {
      res.redirect('/coins');
      })
+     
      .catch(err => {
+      //sendStatus('See kell on juba võetud');
+     
      res.status(400).send("unable to save to database");
      });
  });
@@ -50,6 +53,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
            res.redirect('/coins');
        })
        .catch(err => {
+        //sendStatus('See kell on juba võetud'); //see käib kaasas socket io-ga
              res.status(400).send("unable to update the database");
        });
      }

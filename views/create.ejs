@@ -1,24 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>EJS Engine</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-  </head>
-  <body>
-    <div class="container">
-        <h1>Add Coin</h1>
-        <form method="post" action="/coins/post">
-          <div class="form-group">
-            <label for="item">Coin Name</label>
-            <input type="text" class="form-control" id="name" name="name">
-          </div>
-          <div class="form-group">
-            <label for="item">Coin Price</label>
-            <input type="number" step="0.01" class="form-control" id="price" name="price">
-          </div>
-          <button type="submit" class="btn btn-default">Submit Coin</button>
-        </form>
-    </div>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>EJS Engine</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Add Coin</h1>
+    <form method="post" action="/coins/post">
+     
+      <div class="form-group">
+        <label for="item">Coin Price</label>
+        <!-- <input type="number" step="0.01" class="form-control" id="price" name="price"> -->
+        <select id="options" class="form-control" id="price"  name="price">
+
+           
+
+                <%
+                var options = [ "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00" ];
+                for ( var i = 0; i < options.length; i++ )
+                {
+                    var selected = ( coin.price == "1"+i+":00" ) ? "selected" : "";
+                    %><option value="<%=options[ i ] %>" <%=selected %>><%="1"+i+":00"  %></option><%
+                }
+                %>
+      
+      
+          
+
+
+          
+          <option value="choose">Vali kellaaeg</option>
+          <option value="10:00">10:00</option>
+
+          <option value="11:00">11:00</option>
+          <option value="12:00">12:00</option>
+          <option value="13:00">13:00</option>
+          <option value="14:00">14:00</option>
+          <option value="15:00">15:00</option>
+          <option value="16:00">16:00</option>
+        </select>
+
+      </div>
+      <div class="form-group">
+          <label for="item">Coin Name</label>
+          <input type="text" class="form-control" id="name" name="name">
+        </div>
+      <button type="submit" class="btn btn-default">Submit Coin</button>
+    </form>
+  </div>
+</body>
+
 </html>
