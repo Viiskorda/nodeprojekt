@@ -18,7 +18,7 @@
     <h1>Juuksuri päevakava</h1>
     <td>
       <br>
-      <table class="table table-striped">
+      <table id="myTable" class="table table-striped">
         <thead>
           <tr>
             <td><b>Kell</b></td>
@@ -116,7 +116,8 @@
 <ul id="messages"></ul>
 <script>
   var socket = io();
-  
+  table = document.getElementById("myTable");
+  var time =document.getElementById('options');
   // elemendid muutujatesse
   var chat = document.getElementById("messages");
   var txt = document.getElementById("txt");
@@ -132,9 +133,22 @@
 
   // selle funktsiooni abil võtma serveri poolt vastu teateid nimega 'chat'
   socket.on('chat', function(msg) {
+    if(msg.length){
+
+
+    
+    var row = table.insertRow();
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    cell1.innerHTML = msg;
+    console.log(msg);
+
       // ning lisame saadud teate kõikide teiste teadete hulka
-      chat.innerHTML += '<li>' + msg + '</li>';
-  });
+      // chat.innerHTML += '<li>' + msg + '</li>';
+  }
+
+
+});
 </script>
 
 
