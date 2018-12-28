@@ -11,13 +11,23 @@
     crossorigin="anonymous"></script>
   <style>ul {
       list-style-type: none;
-      margin: 10px 0px;
+      margin: 0px;
       padding: 0px;
     }
     p{
       color:lightgrey;
+      margin: 0px;
+      padding: 0px;
 
     }
+  
+
+    .col-xs-4{
+      margin: 0px;
+      padding: 0px;
+
+    }
+    
     
     </style>
 </head>
@@ -112,19 +122,30 @@
       <button type="submit" class="btn btn-success active">Salvesta</button>
     </form>
 
-    <h3>Chat</h3>
+
     <div id="status"></div>
-    <input type="text" id="username" placeholder="Sisesta oma nimi" required>
-    <br> <br>
-    <input type="text" placeholder="Ütle midagi" id="txt" required>
-    <button id="send">Saada</button>
 
-    <ul id="messages"></ul>
-    <p class="notification"></p>
-    <p id="myList"></p>
-    <!-- <span> <a href="/coins/create %>" class="btn btn-success active" style="width:200px;margin-top:10px;">Create</a></span> -->
+
+    <div class="col-xs-4">
+      <h3>Chat</h3>
+      <input type="text" maxlength="20" class="form-control" id="username" placeholder="Sisesta oma nimi" required>
+      <br>
+      <input type="text" class="form-control" placeholder="Ütle midagi" id="txt" required>
+
+      <br> <button id="send" class="btn btn-info">Saada</button>
+      <ul id="messages"></ul>
+      <p class="notification"></p>
+      <p id="myList"></p>
+      <!-- <span> <a href="/coins/create %>" class="btn btn-success active" style="width:200px;margin-top:10px;">Create</a></span> -->
+
+    </div>
+
+
+
+
+
+
   </div>
-
 
   <!-- Vaja on tekstivälja, nuppu ning ühte elementi veel, kuhu sõnumid tekitada -->
 
@@ -239,7 +260,7 @@
       //   name: service.value
 
       // });
-
+      document.getElementById("txt").focus();
       // txt.value = "";
       socket.emit('input', { txt: txt.value, username: username.value });
       // tekstivälja sisu tühjaks
@@ -256,8 +277,17 @@
 
       if (msg.length) {
         for (var i = 0; i < msg.length; i++) {
-         
-          chat.innerHTML += '<li>' + msg[i].username + ": " + msg[i].txt + '</li>';
+
+          //chat.innerHTML += '<li>' + msg[i].username + ": " + msg[i].txt + '</li>';
+          //chat.insertAdjacentElement('beforebegin', '<li>' + msg[i].username + ": " + msg[i].txt + '</li>');
+
+          var node = document.createElement("li");
+          var textnode = document.createTextNode(msg[i].username + ": " + msg[i].txt);
+          node.appendChild(textnode);
+          var list = chat;
+          list.insertBefore(node, list.childNodes[0]);
+
+
         }
 
       };
@@ -293,10 +323,10 @@
     socket.on('broadcast', function (data) {
       var node = document.createElement("p");
       var textnode = document.createTextNode(data.description);
-      textnode.className = "grayedout";
+      node.className = "grayedout";
       node.appendChild(textnode);
-      document.getElementById("myList").appendChild(node);
-
+      var list = chat;
+      list.insertBefore(node, list.childNodes[0]);
     });
 
 
