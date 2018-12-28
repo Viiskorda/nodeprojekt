@@ -51,20 +51,8 @@
     </tr>
     </thead>
     <tbody>
-      <% for(var i=0; i < coins.length; i++) { %>
-      <tr>
-        <td>
-          <%= coins[i].price;
-       
-          %>
-        </td>
-        <td>
-          <%= coins[i].name;  %>
-        </td>
-        <td><a href="/coins/edit/<%= coins[i]._id %>" class="btn btn-primary">Edit</a></td>
-        <td><a href="/coins/delete/<%= coins[i]._id %>" class="btn btn-danger">Delete</a></td>
       </tr>
-      <% } %>
+
     </tbody>
     </table>
 
@@ -220,14 +208,28 @@
     })
 
     function addMessages(message) {
-      console.log(message._id);
-      $('#myTable').append('<tr> <td> '+message.price +'</td> <td> '+ message.name +' </td>'+
-     ' <td><a href="/coins/edit/'+message._id+'" class="btn btn-primary">Edit</a></td>'+
-        '<td><a href="/coins/delete/'+message._id+'" class="btn btn-danger">Delete</a></td>)</tr>')
+      console.log( message);
+      if (message.price) {
+        console.log("added:" + message._id);
+        $('#myTable').append('<tr id="' + message._id + '"> <td> ' + message.price + '</td> <td> ' + message.name + ' </td>' +
+          ' <td><a href="/coins/edit/' + message._id + '" class="btn btn-primary">Edit</a></td>' +
+          '<td><a href="/coins/delete/' + message._id + '" class="btn btn-danger">Delete</a></td>)</tr>')
+      }
+
+
+      else {
+        console.log("removed:" + message);
+        
+        if ($(this).find('tr').length) $(this).remove();
+
+
+      }
+
+
     }
     function getMessages() {
       $.get('http://localhost:3000/coins/messages', (data) => {
-        data.forEach(addMessages);
+        data.forEach(addMessages);sortTable(0);
       })
     }
     function sendMessage(message) {
@@ -238,7 +240,8 @@
 
     var socket = io();
 
-    socket.on('message', addMessages)
+    socket.on('message', addMessages);
+
 
     table = document.getElementById("myTable");
     var time = document.getElementById('options');

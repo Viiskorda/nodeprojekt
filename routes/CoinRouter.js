@@ -25,7 +25,7 @@ CoinRouter.route('/create').get(function (req, res) {
    coin.save()
      .then(coin => {
      res.redirect('/coins');
-     io.emit('message', req.body);
+     io.sockets.emit('message', req.body);
      })
      
      .catch(err => {
@@ -43,6 +43,41 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
    
  });
 
+
+
+
+ CoinRouter.route('/update/:id').post(function (req, res) {
+   Coin.findById(req.params.id, function(err, coin) {
+     if (!coin)
+       return next(new Error('Could not load Document'));
+     else {
+       // do your updates here
+       coin.name = req.body.name;
+       coin.price = req.body.price;
+ 
+       coin.save().then(coin => {
+           res.redirect('/coins');
+           io.sockets.emit('message', req.body);
+       })
+       .catch(err => {
+        //sendStatus('See kell on juba võetud'); //see käib kaasas socket io-ga
+             res.status(400).send("unable to update the database");
+       });
+     }
+   });
+ });
+
+ CoinRouter.route('/delete/:id').get(function (req, res) {
+   Coin.findByIdAndRemove({_id: req.params.id},
+        function(err, coin){
+         if(err) res.json(err);
+         else res.redirect('/coins');
+         io.sockets.emit('message',  req.params.id);
+     });
+ });
+
+
+
  CoinRouter.route('/messages').get( (req, res) => {
   Coin.find((err, messages)=> {
     res.send(messages);
@@ -58,34 +93,5 @@ CoinRouter.route('/messages').post( (req, res) => {
   })
 });
 
-
-
- CoinRouter.route('/update/:id').post(function (req, res) {
-   Coin.findById(req.params.id, function(err, coin) {
-     if (!coin)
-       return next(new Error('Could not load Document'));
-     else {
-       // do your updates here
-       coin.name = req.body.name;
-       coin.price = req.body.price;
- 
-       coin.save().then(coin => {
-           res.redirect('/coins');
-       })
-       .catch(err => {
-        //sendStatus('See kell on juba võetud'); //see käib kaasas socket io-ga
-             res.status(400).send("unable to update the database");
-       });
-     }
-   });
- });
-
- CoinRouter.route('/delete/:id').get(function (req, res) {
-   Coin.findByIdAndRemove({_id: req.params.id},
-        function(err, coin){
-         if(err) res.json(err);
-         else res.redirect('/coins');
-     });
- });
 
 module.exports = CoinRouter;
