@@ -48,7 +48,6 @@ io.on('connection', function(socket){
   // võtame kliendi poolt vastu teate "chat"
   socket.on('chat', (msg) => {
       // saadame kõikidele klientidele tagasi
-  
       io.emit('chat', msg);
   });
 

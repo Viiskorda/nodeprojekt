@@ -15,5 +15,4 @@ const Coin = new Schema({
     collection: 'coins'
 });
 
-
 module.exports = mongoose.model('Coin', Coin);

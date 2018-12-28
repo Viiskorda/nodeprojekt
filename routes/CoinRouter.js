@@ -20,12 +20,11 @@ CoinRouter.route('/create').get(function (req, res) {
  });
 
  CoinRouter.route('/post').post(function (req, res) {
-   var coin = new Coin(req.body);
+   const coin = new Coin(req.body);
    console.log(coin);
    coin.save()
      .then(coin => {
      res.redirect('/coins');
-     io.emit('chat', coin);
      })
      
      .catch(err => {
@@ -36,7 +35,7 @@ CoinRouter.route('/create').get(function (req, res) {
  });
 
 CoinRouter.route('/edit/:id').get(function (req, res) {
-   var id = req.params.id;
+   const id = req.params.id;
    Coin.findById(id, function (err, coin){
        res.render('edit', {coin: coin});
    });
@@ -54,7 +53,6 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
  
        coin.save().then(coin => {
            res.redirect('/coins');
-           io.emit('chat', coin);
        })
        .catch(err => {
         //sendStatus('See kell on juba võetud'); //see käib kaasas socket io-ga
@@ -68,7 +66,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
    Coin.findByIdAndRemove({_id: req.params.id},
         function(err, coin){
          if(err) res.json(err);
-         else {io.emit('chat', coin); res.redirect('/coins'); }
+         else res.redirect('/coins');
      });
  });
 
