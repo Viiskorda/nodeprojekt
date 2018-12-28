@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const mongooseSocketIo = require('mongoose-socket.io');
 
 const Coin = new Schema({
   name: {
@@ -13,5 +14,6 @@ const Coin = new Schema({
 },{
     collection: 'coins'
 });
+
 
 module.exports = mongoose.model('Coin', Coin);

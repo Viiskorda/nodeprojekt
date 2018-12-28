@@ -97,23 +97,23 @@
       </div>
       <div class="form-group">
         <label for="item">Kliendi nimi ja teenuse nimetus</label>
-        <input type="text" class="form-control" id="name" name="name" required>
+        <input id="service" type="text" class="form-control" id="name" name="name" required>
       </div>
       <button type="submit" class="btn btn-success active">Salvesta</button>
     </form>
 
-
+    <br>
+    <input type="text" id="txt">
+    <button id="send">Send</button>
+    
+    <ul id="messages"></ul>
 
     <!-- <span> <a href="/coins/create %>" class="btn btn-success active" style="width:200px;margin-top:10px;">Create</a></span> -->
   </div>
 
 
 <!-- Vaja on tekstivälja, nuppu ning ühte elementi veel, kuhu sõnumid tekitada -->
-<br>
-<input type="text" id="txt">
-<button id="send">Send</button>
 
-<ul id="messages"></ul>
 <script>
   var socket = io();
   table = document.getElementById("myTable");
@@ -125,27 +125,46 @@
 
   // nupu funktsioon
   sendBtn.addEventListener("click", function(e) {
-      // saadab teate nimega "chat" serverisse, selle peame serveri pool vastu võtma, et kõikidele klientidele edastada
-      socket.emit('chat', txt.value);
+      // saadab teate nimega "input" serverisse, selle peame serveri pool vastu võtma, et kõikidele klientidele edastada
+      socket.emit('chat',  {
+        price: options.value,
+       name: service.value
+       
+    });
       // tekstivälja sisu tühjaks
       txt.value = "";
   });
 
   // selle funktsiooni abil võtma serveri poolt vastu teateid nimega 'chat'
   socket.on('chat', function(msg) {
-    if(msg.length){
+ 
+
+var insertedRows=[];
+Object.keys(msg).forEach(function(key) {
+
+  console.log(msg[key]);
+  insertedRows.push(msg);
 
 
+  var row = table.insertRow();
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  cell1.innerHTML = msg[key];
+
+});
+
+      for (var x = 0; x < insertedRows.length; x++) {
+        console.log(msg[x].price);
     
     var row = table.insertRow();
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
-    cell1.innerHTML = msg;
-    console.log(msg);
+    cell1.innerHTML = msg[x].price;
+}
 
       // ning lisame saadud teate kõikide teiste teadete hulka
       // chat.innerHTML += '<li>' + msg + '</li>';
-  }
+  
 
 
 });
