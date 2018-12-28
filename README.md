@@ -1,12 +1,12 @@
 Rakenduse käivitamiseks:
 
-npm install
-npm start
-mine localhost:3000/coins
-Sisesta kell ja kliendinimi koos teenuse vajadusega
-Salvesta andmebaasi
-Korda veel sammud 4-5
-Proovi muuta ja kustutada
-All näed infot selle kohta mitu kasutajat on samal ajal koos sinuga lehel
-Kui näed seal rohkem kui 2 kasutajat siis saad oma kolleegiga reaalajas chattida
+1. npm install
+2. npm start
+3. mine localhost:3000/coins
+4. Sisesta kell ja kliendinimi koos teenuse vajadusega
+5. Salvesta andmebaasi
+6. Korda veel sammud 4-5
+7. Proovi muuta ja kustutada
+8. All näed infot selle kohta mitu kasutajat on samal ajal koos sinuga lehel
+9. Kui näed seal rohkem kui 2 kasutajat siis saad oma kolleegiga reaalajas chattida
 Head kasutamist!
