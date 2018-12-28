@@ -4,6 +4,8 @@ const port = 3000;
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+var favicon = require('serve-favicon')
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 var server = app.listen(port, function () {
   console.log('Node js Express js Tutorial at port', port);
 });
@@ -45,29 +47,42 @@ var clients = 0;
 users = [];
 io.on('connection', function (socket) {
   console.log('Ühendus kasutajaga on loodud');
+
   sendStatus = function (s) {
     socket.emit('status', s);
-  }
+  };
   // võtame kliendi poolt vastu teate "chat"
   socket.on('input', (msg) => {
-    // saadame kõikidele klientidele tagasi
-    io.emit('chat', msg);
+    let username = msg.username;
+    let txt = msg.txt;
+
+    if (username == '' || txt == '') {
+      // Send error status
+      sendStatus('Please enter a name, message and time');
+    } else {
+      // saadame kõikidele klientidele tagasi
+      io.emit('chat', [msg]);
+      sendStatus({
+        txt: 'Message sent',
+        clear: true
+    });
+    }
   });
 
-   clients++;
-   io.sockets.emit('broadcast',{ description: clients + ' clients connected!'});
-   socket.on('disconnect', function () {
-      clients--;
-      io.sockets.emit('broadcast',{ description: 'One client disconnected, so now is ' +clients + ' clients connected'});
-   });
+  clients++;
+  io.sockets.emit('broadcast', { description: clients + ' admin connected' });
+  socket.on('disconnect', function () {
+    clients--;
+    io.sockets.emit('broadcast', { description: 'One admin disconnected, so now is ' + clients + ' clients connected' });
+  });
 
 
 
 
 
-  socket.on('msg', function(data) {
-      //Send message to everyone
-      io.sockets.emit('newmsg', data);
-   })
+  socket.on('msg', function (data) {
+    //Send message to everyone
+    io.sockets.emit('newmsg', data);
+  })
 
 });
