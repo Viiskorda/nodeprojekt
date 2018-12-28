@@ -7,17 +7,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <style>ul {
+      list-style-type: none;
+      margin: 10px 0px;
+      padding: 0px;
+    }</style>
 </head>
 
-<body>
+<body onload="sortTable(0)">
   <div class="container">
     <h1>Juuksuri päevakava</h1>
     <td>
       <br>
+
+     
       <table id="myTable" class="table table-striped">
         <thead>
           <tr>
@@ -38,7 +43,7 @@
           %>
         </td>
         <td>
-          <%= coins[i].name %>
+          <%= coins[i].name;  %>
         </td>
         <td><a href="/coins/edit/<%= coins[i]._id %>" class="btn btn-primary">Edit</a></td>
         <td><a href="/coins/delete/<%= coins[i]._id %>" class="btn btn-danger">Delete</a></td>
@@ -49,18 +54,18 @@
 
 
 
-
+    
     <form method="post" action="/coins/post">
-
+     
       <div class="form-group">
         <label for="item">Vali kellaaeg</label>
         <!-- <input type="number" step="0.01" class="form-control" id="price" name="price"> -->
         <select id="options" class="form-control" id="price" name="price" required>
 
 
+          
 
-
-          <option value="choose">Vali kellaaeg</option>
+          <option value="choose" selected disabled hidden>Vali kellaaeg</option>
 
           <%
           let newArray=[];
@@ -81,15 +86,15 @@
             
       }
             %>
-            <%   
+          <%   
             for ( var i = 0; i < options.length; i++ ){  
               console.log(options);
               
               %>
-              <option value="<%=options[i] %>">
-                  <%=options[i] %>
-              </option>
-              <% }  console.log(options); %>
+          <option value="<%=options[i] %>">
+            <%=options[i] %>
+          </option>
+          <% }  console.log(options); %>
 
 
         </select>
@@ -103,70 +108,150 @@
     </form>
 
     <br>
-    <input type="text" placeholder="Staatus" id="txt">
+    <input type="text" placeholder="Ütle midagi" id="txt">
     <button id="send">Send</button>
-    
-    <ul id="messages"></ul>
 
+    <ul id="messages"></ul>
+    <p class="notification"></p>
+    <p id="myList"></p>
     <!-- <span> <a href="/coins/create %>" class="btn btn-success active" style="width:200px;margin-top:10px;">Create</a></span> -->
   </div>
 
 
-<!-- Vaja on tekstivälja, nuppu ning ühte elementi veel, kuhu sõnumid tekitada -->
+  <!-- Vaja on tekstivälja, nuppu ning ühte elementi veel, kuhu sõnumid tekitada -->
 
-<script>
-  var socket = io();
-  table = document.getElementById("myTable");
-  var time =document.getElementById('options');
-  // elemendid muutujatesse
-  var chat = document.getElementById("messages");
-  var txt = document.getElementById("txt");
-  var sendBtn = document.getElementById("send");
+  <script>
+ function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("myTable");
+            switching = true;
+            //Set the sorting direction to ascending:
+            dir = "asc";
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+                //start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /*Loop through all table rows (except the
+                first, which contains table headers):*/
+                for (i = 1; i < (rows.length - 1); i++) {
+                    //start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /*Get the two elements you want to compare,
+                    one from current row and one from the next:*/
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    /*check if the two rows should switch place,
+                    based on the direction, asc or desc:*/
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /*If a switch has been marked, make the switch
+                    and mark that a switch has been done:*/
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    //Each time a switch is done, increase this count by 1:
+                    switchcount++;
+                } else {
+                    /*If no switching has been done AND the direction is "asc",
+                    set the direction to "desc" and run the while loop again.*/
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
 
-  // nupu funktsioon
-  sendBtn.addEventListener("click", function(e) {
+
+
+
+
+
+
+    var socket = io();
+    table = document.getElementById("myTable");
+    var time = document.getElementById('options');
+    // elemendid muutujatesse
+    var chat = document.getElementById("messages");
+    var txt = document.getElementById("txt");
+    var sendBtn = document.getElementById("send");
+
+    // nupu funktsioon
+    sendBtn.addEventListener("click", function (e) {
       // saadab teate nimega "input" serverisse, selle peame serveri pool vastu võtma, et kõikidele klientidele edastada
-      socket.emit('input',  {
-        price: options.value,
-       name: service.value
-       
-    });
+      // socket.emit('input', {
+      //   price: options.value,
+      //   name: service.value
+
+      // });
+     
+      // txt.value = "";
+      socket.emit('input', txt.value);
       // tekstivälja sisu tühjaks
       txt.value = "";
-  });
 
-  // selle funktsiooni abil võtma serveri poolt vastu teateid nimega 'chat'
-  socket.on('chat', function(msg) {
- 
 
-var insertedRows=[];
-Object.keys(msg).forEach(function(key) {
 
-  console.log(msg[key]);
-  insertedRows.push(msg[key]);
-  var row = table.insertRow();
-  var cell1 = row.insertCell(0);
-  var cell2 = row.insertCell(1);
-  cell1.innerHTML = msg[key];
 
-});
+    });
 
-      for (var x = 0; x < insertedRows.length; x++) {
-        console.log(msg[x].price);
-    
-    var row = table.insertRow();
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    cell1.innerHTML = msg[x].price;
-}
+    // selle funktsiooni abil võtma serveri poolt vastu teateid nimega 'chat'
+    socket.on('chat', function (msg) {
+
+      chat.innerHTML += '<li>' + msg + '</li>';
+      //var insertedRows = [];
+
+
+      // Object.keys(msg).forEach(function (key) {
+      //   console.log(msg[key]);
+      //   insertedRows.push(msg[key]);
+      //   var row = table.insertRow();
+      //   var cell1 = row.insertCell(0);
+      //   var cell2 = row.insertCell(1);
+      //   cell1.innerHTML = msg[key];
+      // });
+
+      // for (var x = 0; x < insertedRows.length; x++) {
+      //   console.log(msg[x].price);
+
+      //   var row = table.insertRow();
+      //   var cell1 = row.insertCell(0);
+      //   var cell2 = row.insertCell(1);
+      //   cell1.innerHTML = msg[x].price;
+      // }
 
       // ning lisame saadud teate kõikide teiste teadete hulka
       // chat.innerHTML += '<li>' + msg + '</li>';
-  
 
 
-});
-</script>
+
+    });
+
+    socket.on('broadcast', function (data) {
+      var node = document.createElement("P");
+      var textnode = document.createTextNode(data.description);
+      node.appendChild(textnode);
+      document.getElementById("myList").appendChild(node);
+
+    });
+
+
+
+  </script>
 
 
 

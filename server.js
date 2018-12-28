@@ -4,7 +4,7 @@ const port = 3000;
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-var server =app.listen(port, function(){
+var server = app.listen(port, function () {
   console.log('Node js Express js Tutorial at port', port);
 });
 global.io = require('socket.io').listen(server);
@@ -17,13 +17,13 @@ const CoinRouter = require('./routes/CoinRouter');
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/coins', CoinRouter);
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname,'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 
@@ -41,15 +41,33 @@ app.get('/', function (req, res) {
 //     io.emit('user disconnected');
 //   });
 // });
-
-io.on('connection', function(socket){
+var clients = 0;
+users = [];
+io.on('connection', function (socket) {
   console.log('Ühendus kasutajaga on loodud');
-  
+  sendStatus = function (s) {
+    socket.emit('status', s);
+  }
   // võtame kliendi poolt vastu teate "chat"
-  socket.on('chat', (msg) => {
-      // saadame kõikidele klientidele tagasi
-      io.emit('chat', msg);
+  socket.on('input', (msg) => {
+    // saadame kõikidele klientidele tagasi
+    io.emit('chat', msg);
   });
 
-  
+   clients++;
+   io.sockets.emit('broadcast',{ description: clients + ' clients connected!'});
+   socket.on('disconnect', function () {
+      clients--;
+      io.sockets.emit('broadcast',{ description: 'One client disconnected, so now is ' +clients + ' clients connected'});
+   });
+
+
+
+
+
+  socket.on('msg', function(data) {
+      //Send message to everyone
+      io.sockets.emit('newmsg', data);
+   })
+
 });
