@@ -119,7 +119,7 @@
         <label for="item">Kliendi nimi ja teenuse nimetus</label>
         <input id="service" placeholder="Info" type="text" class="form-control" id="name" name="name" required>
       </div>
-      <button type="submit" class="btn btn-success active">Salvesta</button>
+      <button id="juuksur" type="submit" class="btn btn-success active">Salvesta</button>
     </form>
 
 
@@ -209,12 +209,37 @@
     }
 
 
+    $(() => {
+      $("#juuksur").click(() => {
+        sendMessage({
+          price: $("#txt").val(),
+          username: $("#username").val()
+        });
+      })
+      getMessages()
+    })
 
-
+    function addMessages(message) {
+      console.log(message._id);
+      $('#myTable').append('<tr> <td> '+message.price +'</td> <td> '+ message.name +' </td>'+
+     ' <td><a href="/coins/edit/'+message._id+'" class="btn btn-primary">Edit</a></td>'+
+        '<td><a href="/coins/delete/'+message._id+'" class="btn btn-danger">Delete</a></td>)</tr>')
+    }
+    function getMessages() {
+      $.get('http://localhost:3000/coins/messages', (data) => {
+        data.forEach(addMessages);
+      })
+    }
+    function sendMessage(message) {
+      $.post('http://localhost:3000/coins/messages', message)
+    }
 
 
 
     var socket = io();
+
+    socket.on('message', addMessages)
+
     table = document.getElementById("myTable");
     var time = document.getElementById('options');
     // elemendid muutujatesse
@@ -261,7 +286,7 @@
 
       // });
       document.getElementById("txt").focus();
-      // txt.value = "";
+
       socket.emit('input', { txt: txt.value, username: username.value });
       // tekstivälja sisu tühjaks
       txt.value = "";

@@ -25,6 +25,7 @@ CoinRouter.route('/create').get(function (req, res) {
    coin.save()
      .then(coin => {
      res.redirect('/coins');
+     io.emit('message', req.body);
      })
      
      .catch(err => {
@@ -41,6 +42,23 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
    });
    
  });
+
+ CoinRouter.route('/messages').get( (req, res) => {
+  Coin.find((err, messages)=> {
+    res.send(messages);
+  })
+});
+
+CoinRouter.route('/messages').post( (req, res) => {
+  var message = new Coin(req.body);
+  message.save((err) =>{
+    if(err)
+      sendStatus(500);
+    res.sendStatus(200);
+  })
+});
+
+
 
  CoinRouter.route('/update/:id').post(function (req, res) {
    Coin.findById(req.params.id, function(err, coin) {
