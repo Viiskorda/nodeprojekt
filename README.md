@@ -9,4 +9,5 @@ Rakenduse käivitamiseks:
 7. Proovi muuta ja kustutada
 8. All näed infot selle kohta mitu kasutajat on samal ajal koos sinuga lehel
 9. Kui näed seal rohkem kui 2 kasutajat siis saad oma kolleegiga reaalajas chattida
+
 Head kasutamist!
