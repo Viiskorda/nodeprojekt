@@ -15,7 +15,7 @@
       padding: 0px;
     }
     p{
-      color:lightgrey;
+      color:rgb(43, 43, 43);
       margin: 0px;
       padding: 0px;
 
@@ -35,25 +35,25 @@
 <body onload="sortTable()">
   <div class="container">
     <h1>Juuksuri päevakava</h1>
-    
-      <br>
+
+    <br>
+    <div id="messages"></div>
+
+    <table id="myTable" class="table table-striped">
+      <thead>
+        <tr>
+          <td><b>Kell</b></td>
+          <td><b>kliendi nimi ja teenuse nimetus</b></td>
+
+          <td colspan="2"><b>Action</b> </td>
 
 
-      <table id="myTable" class="table table-striped">
-        <thead>
-          <tr>
-            <td><b>Kell</b></td>
-            <td><b>kliendi nimi ja teenuse nimetus</b></td>
+        </tr>
+      </thead>
+      <tbody>
 
-            <td colspan="2"><b>Action</b> </td>
 
-    
-    </tr>
-    </thead>
-    <tbody>
-     
-
-    </tbody>
+      </tbody>
     </table>
 
 
@@ -111,109 +111,13 @@
     </form>
 
 
-   
+
   </div>
+
 
   <!-- Vaja on tekstivälja, nuppu ning ühte elementi veel, kuhu sõnumid tekitada -->
 
   <script>
-   function sortTable() {
-  var table, rows, switching, i, x, y, shouldSwitch;
-  table = document.getElementById("myTable");
-  switching = true;
-  /*Make a loop that will continue until
-  no switching has been done:*/
-  while (switching) {
-    //start by saying: no switching is done:
-    switching = false;
-    rows = table.rows;
-    /*Loop through all table rows (except the
-    first, which contains table headers):*/
-    for (i = 1; i < (rows.length - 1); i++) {
-      //start by saying there should be no switching:
-      shouldSwitch = false;
-      /*Get the two elements you want to compare,
-      one from current row and one from the next:*/
-      x = rows[i].getElementsByTagName("TD")[0];
-      y = rows[i + 1].getElementsByTagName("TD")[0];
-      //check if the two rows should switch place:
-      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-        //if so, mark as a switch and break the loop:
-        shouldSwitch = true;
-        break;
-      }
-    }
-    if (shouldSwitch) {
-      /*If a switch has been marked, make the switch
-      and mark that a switch has been done:*/
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-      switching = true;
-    }
-  }
-}
-
-
-    $(() => {
-      $("#juuksur").click(() => {
-        // sendMessage({
-        //   price: $("#txt").val(),
-        //   username: $("#username").val()
-        // });
-      })
-      getMessages()
-    })
-
-    function addMessages(message) {
-     // console.log(message);
-      if (message.price) {
-       // console.log("added:" + message._id);
-        $('#myTable').append('<tr id="' + message._id + '"> <td> ' + message.price + '</td> <td> ' + message.name + ' </td>' +
-          ' <td><a href="/coins/edit/' + message._id + '" class="btn btn-primary">Edit</a></td>' +
-          '<td><a href="/coins/delete/' + message._id + '" class="btn btn-danger">Delete</a></td>)</tr>')
-      }
-      
-
-      else {
-        //console.log("removed:" + message);
-       // if ($(this).find('tr').length) $(this).remove();
-
-      };sortTable();
-      
-    }
-    function getMessages() {
-      $.get('http://localhost:3000/coins/messages', (data) => {
-        data.forEach(addMessages);sortTable();
-      })
-    }
-    // function sendMessage(message) {
-    //   $.post('http://localhost:3000/coins/messages', message)
-    // }
-
-
-
-    function removeMessages(message) {
-  //   console.log( message);
-     
-       
-        //if ($(this).find('tr').length) $(this).remove();
-        $('#'+message).remove();sortTable();
-     
-      
-    }
-
-    function changeMessages(message) {
-  //   console.log("update tehtud "+ message.params.id);
-          
-        //if ($(this).find('tr').length) $(this).remove();
-        $('#'+message.params.id).remove();
-        $('#myTable').append('<tr id="' + message.params.id + '"> <td> ' + message.body.price + '</td> <td> ' + message.body.name + ' </td>' +
-          ' <td><a href="/coins/edit/' + message.params.id + '" class="btn btn-primary">Edit</a></td>' +
-          '<td><a href="/coins/delete/' + message.params.id + '" class="btn btn-danger">Delete</a></td>)</tr>');
-          sortTable();
-
-    }
-
-    
 
 
     var socket = io();
@@ -246,6 +150,139 @@
     }
 
 
+
+
+
+    function sortTable() {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("myTable");
+      switching = true;
+      /*Make a loop that will continue until
+      no switching has been done:*/
+      while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /*Loop through all table rows (except the
+        first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 1); i++) {
+          //start by saying there should be no switching:
+          shouldSwitch = false;
+          /*Get the two elements you want to compare,
+          one from current row and one from the next:*/
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          //check if the two rows should switch place:
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            //if so, mark as a switch and break the loop:
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          /*If a switch has been marked, make the switch
+          and mark that a switch has been done:*/
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+
+    $(() => {
+      $("#juuksur").click(() => {
+        // sendMessage({
+        //   price: $("#txt").val(),
+        //   username: $("#username").val()
+        // });
+      })
+      getMessages()
+    })
+
+    function addMessages(message) {
+      // console.log(message);
+      if (message.price) {
+        // console.log("added:" + message._id);
+        $('#myTable').append('<tr id="' + message._id + '"> <td> ' + message.price + '</td> <td> ' + message.name + ' </td>' +
+          ' <td><a href="/coins/edit/' + message._id + '" class="btn btn-primary">Edit</a></td>' +
+          '<td><a href="/coins/delete/' + message._id + '" class="btn btn-danger">Delete</a></td>)</tr>')
+      }
+
+
+      else {
+        //console.log("removed:" + message);
+        // if ($(this).find('tr').length) $(this).remove();
+
+      }; sortTable();
+      socket.emit('teade', "");
+
+    }
+    function getMessages() {
+      $.get('http://localhost:3000/coins/messages', (data) => {
+        data.forEach(addMessages); sortTable();
+      })
+    }
+    // function sendMessage(message) {
+    //   $.post('http://localhost:3000/coins/messages', message)
+    // }
+
+
+
+    function removeMessages(message) {
+      //   console.log( message);
+
+
+      //if ($(this).find('tr').length) $(this).remove();
+      $('#' + message).remove(); sortTable();
+      socket.emit('kustutati', "");
+
+    }
+
+    function changeMessages(message) {
+      //   console.log("update tehtud "+ message.params.id);
+
+      //if ($(this).find('tr').length) $(this).remove();
+      $('#' + message.params.id).remove();
+      $('#myTable').append('<tr id="' + message.params.id + '"> <td> ' + message.body.price + '</td> <td> ' + message.body.name + ' </td>' +
+        ' <td><a href="/coins/edit/' + message.params.id + '" class="btn btn-primary">Edit</a></td>' +
+        '<td><a href="/coins/delete/' + message.params.id + '" class="btn btn-danger">Delete</a></td>)</tr>');
+      sortTable();
+
+    };
+
+    socket.on('teade', function (msg) {
+      // ning lisame saadud teate kõikide teiste teadete hulka
+
+      var header = $('#messages');
+      header.addClass('alert alert-success');
+
+      header.append('<p id="notification" class=" .text-dark">' + msg + '</p>');
+     
+      setTimeout(function () {
+        $('#notification').remove();
+        header.removeClass('alert alert-success');
+      }, 10000);
+
+
+
+    });
+
+    socket.on('kustutati', function (msg) {
+      // ning lisame saadud teate kõikide teiste teadete hulka
+
+      var header = $('#messages');
+      header.addClass('alert alert-danger');
+
+      header.append('<p id="notification" class=" .text-dark">' + msg + '</p>');
+     
+      setTimeout(function () {
+        $('#notification').remove();
+        header.removeClass('alert alert-success');
+      }, 10000);
+
+
+
+    });
 
 
 

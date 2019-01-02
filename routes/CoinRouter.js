@@ -26,6 +26,10 @@ CoinRouter.route('/create').get(function (req, res) {
      .then(coin => {
      res.redirect('/coins');
      io.sockets.emit('message', req.body);
+    
+      // saadame kõikidele klientidele tagasi
+      io.emit('teade', 'Andmed salvestati: '+req.body.price+' '+req.body.name);
+  
      })
      
      .catch(err => {
@@ -58,6 +62,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
        coin.save().then(coin => {
            res.redirect('/coins');
            io.sockets.emit('change', {params: req.params, body: req.body});
+           io.emit('teade', 'Andmebaasis tehti muudatus');
        })
        .catch(err => {
         //sendStatus('See kell on juba võetud'); //see käib kaasas socket io-ga
@@ -73,6 +78,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
          if(err) res.json(err);
          else res.redirect('/coins');
          io.sockets.emit('remove',  req.params.id);
+         io.emit('kustutati', 'Broneering tühistati');
      });
  });
 
