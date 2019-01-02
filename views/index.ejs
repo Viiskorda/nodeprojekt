@@ -32,10 +32,10 @@
     </style>
 </head>
 
-<body onload="sortTable(0)">
+<body onload="sortTable()">
   <div class="container">
     <h1>Juuksuri päevakava</h1>
-    <td>
+    
       <br>
 
 
@@ -47,11 +47,11 @@
 
             <td colspan="2"><b>Action</b> </td>
 
-    </td>
+    
     </tr>
     </thead>
     <tbody>
-      </tr>
+     
 
     </tbody>
     </table>
@@ -138,110 +138,110 @@
   <!-- Vaja on tekstivälja, nuppu ning ühte elementi veel, kuhu sõnumid tekitada -->
 
   <script>
-    function sortTable(n) {
-
-
-
-      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-      table = document.getElementById("myTable");
-      switching = true;
-      //Set the sorting direction to ascending:
-      dir = "asc";
-      /*Make a loop that will continue until
-      no switching has been done:*/
-      while (switching) {
-        //start by saying: no switching is done:
-        switching = false;
-        rows = table.rows;
-        /*Loop through all table rows (except the
-        first, which contains table headers):*/
-        for (i = 1; i < (rows.length - 1); i++) {
-          //start by saying there should be no switching:
-          shouldSwitch = false;
-          /*Get the two elements you want to compare,
-          one from current row and one from the next:*/
-          x = rows[i].getElementsByTagName("TD")[n];
-          y = rows[i + 1].getElementsByTagName("TD")[n];
-          /*check if the two rows should switch place,
-          based on the direction, asc or desc:*/
-          if (dir == "asc") {
-            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-              //if so, mark as a switch and break the loop:
-              shouldSwitch = true;
-              break;
-            }
-          } else if (dir == "desc") {
-            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-              //if so, mark as a switch and break the loop:
-              shouldSwitch = true;
-              break;
-            }
-          }
-        }
-        if (shouldSwitch) {
-          /*If a switch has been marked, make the switch
-          and mark that a switch has been done:*/
-          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-          switching = true;
-          //Each time a switch is done, increase this count by 1:
-          switchcount++;
-        } else {
-          /*If no switching has been done AND the direction is "asc",
-          set the direction to "desc" and run the while loop again.*/
-          if (switchcount == 0 && dir == "asc") {
-            dir = "desc";
-            switching = true;
-          }
-        }
+   function sortTable() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("myTable");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[0];
+      y = rows[i + 1].getElementsByTagName("TD")[0];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
       }
     }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
 
 
     $(() => {
       $("#juuksur").click(() => {
-        sendMessage({
-          price: $("#txt").val(),
-          username: $("#username").val()
-        });
+        // sendMessage({
+        //   price: $("#txt").val(),
+        //   username: $("#username").val()
+        // });
       })
       getMessages()
     })
 
     function addMessages(message) {
-      console.log( message);
+     // console.log(message);
       if (message.price) {
-        console.log("added:" + message._id);
+       // console.log("added:" + message._id);
         $('#myTable').append('<tr id="' + message._id + '"> <td> ' + message.price + '</td> <td> ' + message.name + ' </td>' +
           ' <td><a href="/coins/edit/' + message._id + '" class="btn btn-primary">Edit</a></td>' +
           '<td><a href="/coins/delete/' + message._id + '" class="btn btn-danger">Delete</a></td>)</tr>')
       }
-
+      
 
       else {
-        console.log("removed:" + message);
-        
-        if ($(this).find('tr').length) $(this).remove();
+        //console.log("removed:" + message);
+       // if ($(this).find('tr').length) $(this).remove();
 
-
-      }
-
-
+      };sortTable();
+      
     }
     function getMessages() {
       $.get('http://localhost:3000/coins/messages', (data) => {
-        data.forEach(addMessages);sortTable(0);
+        data.forEach(addMessages);sortTable();
       })
     }
-    function sendMessage(message) {
-      $.post('http://localhost:3000/coins/messages', message)
+    // function sendMessage(message) {
+    //   $.post('http://localhost:3000/coins/messages', message)
+    // }
+
+
+
+    function removeMessages(message) {
+  //   console.log( message);
+     
+       
+        //if ($(this).find('tr').length) $(this).remove();
+        $('#'+message).remove();sortTable();
+     
+      
     }
 
+    function changeMessages(message) {
+  //   console.log("update tehtud "+ message.params.id);
+          
+        //if ($(this).find('tr').length) $(this).remove();
+        $('#'+message.params.id).remove();
+        $('#myTable').append('<tr id="' + message.params.id + '"> <td> ' + message.body.price + '</td> <td> ' + message.body.name + ' </td>' +
+          ' <td><a href="/coins/edit/' + message.params.id + '" class="btn btn-primary">Edit</a></td>' +
+          '<td><a href="/coins/delete/' + message.params.id + '" class="btn btn-danger">Delete</a></td>)</tr>');
+          sortTable();
+
+    }
+
+    
 
 
     var socket = io();
 
     socket.on('message', addMessages);
-
+    socket.on('remove', removeMessages);
+    socket.on('change', changeMessages);
 
     table = document.getElementById("myTable");
     var time = document.getElementById('options');
@@ -254,7 +254,7 @@
     var service = document.getElementById('service');
 
     var statusDefault = status.textContent;
-    console.log(statusDefault);
+    //console.log(statusDefault);
     var setStatus = function (s) {
       // Set status
       status.textContent = s;
@@ -265,6 +265,22 @@
         }, 4000);
       }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Chati osa, mida ilmselt kustutan
+
 
     // Get Status From Server
     // see osa kahjuks ei tööta, aga minu teises nodejs rakenduses töötas. See annab teada kasutajale, et nii nime kui ka sõnumi väljad peavad olema täidetud
@@ -298,6 +314,9 @@
 
 
     });
+
+
+
 
     // selle funktsiooni abil võtma serveri poolt vastu teateid nimega 'chat'
     //OUTPUT

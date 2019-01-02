@@ -57,7 +57,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
  
        coin.save().then(coin => {
            res.redirect('/coins');
-           io.sockets.emit('message', req.body);
+           io.sockets.emit('change', {params: req.params, body: req.body});
        })
        .catch(err => {
         //sendStatus('See kell on juba võetud'); //see käib kaasas socket io-ga
@@ -72,7 +72,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
         function(err, coin){
          if(err) res.json(err);
          else res.redirect('/coins');
-         io.sockets.emit('message',  req.params.id);
+         io.sockets.emit('remove',  req.params.id);
      });
  });
 
