@@ -3,33 +3,33 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Edit Coin</title>
+  <title>Edit </title>
   <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 
 <body>
   <div class="container">
-    <h1>Edit Coin</h1>
-    <form method="post" action="/coins/update/<%= coin._id %>">
+    <h1>Edit time</h1>
+    <form method="post" action="/bookingtime/update/<%= time._id %>">
       <div class="form-group">
         <label for="item">Vali kell</label>
         
 
-      <select id="options" class="form-control" id="price" name="price">
+      <select id="options" class="form-control" id="time" name="time">
 
           <%
           var options = [ "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00" ];
           let newArray=[];
-          for ( var i = 0; i < coin.length; i++ ){
-            console.log(coin);
-            newArray.push(coins[i].price);
+          for ( var i = 0; i < time.length; i++ ){
+            console.log(time);
+            newArray.push(bookingtime[i].time);
 
           };
           for ( var i = 0; i < options.length; i++ )
           {
 
 
-              var selected = ( coin.price == "1"+i+":00" ) ? "selected" : "";
+              var selected = ( time.time == "1"+i+":00" ) ? "selected" : "";
 
               options = options.filter( function( el ) {
                 
@@ -49,7 +49,7 @@
 
       <div class="form-group">
         <label for="item">Kliendi nimi ja teenuse kirjeldus</label>
-        <input type="text" class="form-control" id="name" name="name" value="<%= coin.name %>">
+        <input type="text" class="form-control" id="name" name="name" value="<%= time.name %>">
       </div>
       <button type="submit" class="btn btn-default">Update</button>
     </form>

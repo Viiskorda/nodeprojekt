@@ -12,9 +12,9 @@ var server = app.listen(port, function () {
 global.io = require('socket.io').listen(server);
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/expressdemo');
+mongoose.connect('mongodb://localhost/reservations');
 
-const CoinRouter = require('./routes/CoinRouter');
+const HairDresserRouter = require('./routes/HairDresserRouter');
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/coins', CoinRouter);
+app.use('/bookingtime', HairDresserRouter);
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
