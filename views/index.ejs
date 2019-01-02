@@ -111,28 +111,7 @@
     </form>
 
 
-    <div id="status"></div>
-
-
-    <div class="col-xs-4">
-      <h3>Chat</h3>
-      <input type="text" maxlength="20" class="form-control" id="username" placeholder="Sisesta oma nimi" required>
-      <br>
-      <input type="text" class="form-control" placeholder="Ütle midagi" id="txt" required>
-
-      <br> <button id="send" class="btn btn-info">Saada</button>
-      <ul id="messages"></ul>
-      <p class="notification"></p>
-      <p id="myList"></p>
-      <!-- <span> <a href="/coins/create %>" class="btn btn-success active" style="width:200px;margin-top:10px;">Create</a></span> -->
-
-    </div>
-
-
-
-
-
-
+   
   </div>
 
   <!-- Vaja on tekstivälja, nuppu ning ühte elementi veel, kuhu sõnumid tekitada -->
@@ -274,107 +253,6 @@
 
 
 
-
-
-
-
-
-//Chati osa, mida ilmselt kustutan
-
-
-    // Get Status From Server
-    // see osa kahjuks ei tööta, aga minu teises nodejs rakenduses töötas. See annab teada kasutajale, et nii nime kui ka sõnumi väljad peavad olema täidetud
-    socket.on('status', function (data) {
-      // get message status
-      setStatus((typeof data === 'object') ? data.message : data);
-
-      // If status is clear, clear text
-      if (data.clear) {
-        service.value = '';
-      }
-    });
-
-
-
-    //INPUT
-    sendBtn.addEventListener("click", function (e) {
-      // saadab teate nimega "input" serverisse, selle peame serveri pool vastu võtma, et kõikidele klientidele edastada
-      // socket.emit('input', {
-      //   price: options.value,
-      //   name: service.value
-
-      // });
-      document.getElementById("txt").focus();
-
-      socket.emit('input', { txt: txt.value, username: username.value });
-      // tekstivälja sisu tühjaks
-      txt.value = "";
-
-
-
-
-    });
-
-
-
-
-    // selle funktsiooni abil võtma serveri poolt vastu teateid nimega 'chat'
-    //OUTPUT
-    socket.on('chat', function (msg) {
-
-      if (msg.length) {
-        for (var i = 0; i < msg.length; i++) {
-
-          //chat.innerHTML += '<li>' + msg[i].username + ": " + msg[i].txt + '</li>';
-          //chat.insertAdjacentElement('beforebegin', '<li>' + msg[i].username + ": " + msg[i].txt + '</li>');
-
-          var node = document.createElement("li");
-          var textnode = document.createTextNode(msg[i].username + ": " + msg[i].txt);
-          node.appendChild(textnode);
-          var list = chat;
-          list.insertBefore(node, list.childNodes[0]);
-
-
-        }
-
-      };
-
-      //var insertedRows = [];
-
-
-      // Object.keys(msg).forEach(function (key) {
-      //   console.log(msg[key]);
-      //   insertedRows.push(msg[key]);
-      //   var row = table.insertRow();
-      //   var cell1 = row.insertCell(0);
-      //   var cell2 = row.insertCell(1);
-      //   cell1.innerHTML = msg[key];
-      // });
-
-      // for (var x = 0; x < insertedRows.length; x++) {
-      //   console.log(msg[x].price);
-
-      //   var row = table.insertRow();
-      //   var cell1 = row.insertCell(0);
-      //   var cell2 = row.insertCell(1);
-      //   cell1.innerHTML = msg[x].price;
-      // }
-
-      // ning lisame saadud teate kõikide teiste teadete hulka
-      // chat.innerHTML += '<li>' + msg + '</li>';
-
-
-
-    });
-
-    socket.on('broadcast', function (data) {
-      var node = document.createElement("p");
-      var textnode = document.createTextNode(data.description);
-      node.className = "grayedout";
-      node.appendChild(textnode);
-      var list = chat;
-      list.insertBefore(node, list.childNodes[0]);
-    });
 
 
 

@@ -31,7 +31,7 @@ CoinRouter.route('/create').get(function (req, res) {
      .catch(err => {
       //sendStatus('See kell on juba võetud');
      
-     res.status(400).send("unable to save to database");
+     res.status(400).send("Veateade! See aeg on juba võetud. Vali teine aeg");
      });
  });
 
@@ -61,7 +61,7 @@ CoinRouter.route('/edit/:id').get(function (req, res) {
        })
        .catch(err => {
         //sendStatus('See kell on juba võetud'); //see käib kaasas socket io-ga
-             res.status(400).send("unable to update the database");
+             res.status(400).send("Veateade! See aeg on juba võetud!");
        });
      }
    });
