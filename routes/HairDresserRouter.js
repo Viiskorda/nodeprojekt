@@ -24,11 +24,12 @@ HairDresserRouter.route('/create').get(function (req, res) {
    console.log(time);
    time.save()
      .then(time => {
-     res.redirect('/bookingtime');
-     io.sockets.emit('message', req.body);
-    
+      res.redirect('back');
+     io.sockets.emit('message', time);
+     
       // saadame kõikidele klientidele tagasi
-      io.emit('teade', 'Andmed salvestati: '+req.body.time+' '+req.body.name);
+      io.emit('teade', 'Andmed salvestati: ' +time.time+' '+time.name);
+
   
      })
      
@@ -38,6 +39,9 @@ HairDresserRouter.route('/create').get(function (req, res) {
      res.status(400).send("Veateade! See aeg on juba võetud. Vali teine aeg");
      });
  });
+
+
+
 
 HairDresserRouter.route('/edit/:id').get(function (req, res) {
    const id = req.params.id;
